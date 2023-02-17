@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Paginations from './Pagination';
 
 export default function Detail(props) {
     const [currentPage, setCurrentPage] = useState(1);
-    const [ datasPerPage,setdataPerPage ] = useState(5);
+    const [datasPerPage, setdataPerPage] = useState(5);
+    console.log(currentPage)
 
     const indexOfLastData = currentPage * datasPerPage;
     const indexOfFirstData = indexOfLastData - datasPerPage;
@@ -14,6 +15,11 @@ export default function Detail(props) {
     let Nobeldatadesciption
 
     let check = 0;
+
+    const prizeAmountdata = [];
+
+    let prizeAmountfilter
+    let sumprizeAmount
 
     if (props.nobeldata.length != 0) {
         Nobeldatadesciption = currentDatas.map((el, i) => {
@@ -33,8 +39,24 @@ export default function Detail(props) {
                 .map((h, i) => {
                     return (<div key={i}>{h.motivation.en}</div>)
                 });
+            prizeAmountfilter = currentDatas
+                .filter((p) => p.prizeAmount)
+                .map((k, i) => {
+                    prizeAmountdata.push(k.prizeAmount);
+                    return (<></>)
+                })
+
+            const sum = 0;
+
             if (props.filteryear == awardYear) {
                 check = check + 1;
+                if (check == 5) {
+                    sumprizeAmount = prizeAmountdata.reduce(
+                        (accumulator, currentValue) => accumulator + currentValue,
+                        sum
+                    );
+                }
+
                 return (
                     <div key={i}>
                         <div className='flex'>
@@ -48,6 +70,10 @@ export default function Detail(props) {
                     </div>
                 );
             } else if (props.filteryear == 0) {
+                sumprizeAmount = prizeAmountdata.reduce(
+                    (accumulator, currentValue) => accumulator + currentValue,
+                    sum
+                );
                 return (
                     <div key={i}>
                         <div className='flex'>
@@ -65,10 +91,19 @@ export default function Detail(props) {
         })
     }
 
+    useEffect(() => {
+        setCurrentPage(1)
+        if (check == 5) {
+            const p = prizeAmountfilter;
+        }
+        sumprizeAmount = 0;
+    }, [props.filteryear])
+
     return (
         <>
             <div className='flex justify-center items-center min-h-[90vh] w-full bg-green-300'>
                 <div>{Nobeldatadesciption}
+                    <div className='text-xl text-rose-600'>prizeamount total {sumprizeAmount}</div>
                     <Paginations
                         datasPerPage={datasPerPage}
                         totalDatas={props.nobeldata.length}

@@ -5,8 +5,6 @@ import Filter from '../components/Filter'
 import Header from '../components/Header'
 
 
-
-
 export default function Home() {
     const [nobeldata, setnobeldata] = useState([]);
     const [ filteryear,setfilteryear ] = useState(0);
@@ -23,7 +21,7 @@ export default function Home() {
 
     return (
         <div>
-            <Header />
+            <Header filteryear={filteryear} />
             <div className='flex'>
                 <Filter nobeldata={nobeldata} setyear={setfilteryear}/>
                 <Detail nobeldata={nobeldata} filteryear={filteryear}/>
